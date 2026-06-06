@@ -14,7 +14,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"   # garminconnect 0.3.x requires >= 3.12
 
       - name: Install deps
         run: pip install -r garmin-sync/requirements.txt
