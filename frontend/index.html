@@ -172,8 +172,21 @@
 "use strict";
 
 /* ---------------- API CONFIG ---------------- */
-var API_URL   = "https://script.google.com/macros/s/AKfycbyPVisAOXN1avfpXaboeAFqQX-aTcQtbNGE1iEgTNjXKo5jKQLjplqJg7VGfSH0iqyzsw/exec";
-var API_TOKEN = "ac89e5fda37dfe931b78b4eb1293e5c7666f89377b09997a";
+// Connection details are NOT committed to the repo — entered once per device and kept in
+// localStorage, so the public app ships no URL or token. Re-enter via Progress → Connection.
+var API_URL = "", API_TOKEN = "";
+function _cfg(){ try{ return JSON.parse(localStorage.getItem("rc2026_cfg"))||{}; }catch(e){ return {}; } }
+function ensureConfig(force){
+  var c = force ? {} : _cfg();
+  if(!c.url)   c.url   = (prompt("One-time setup — paste your Apps Script Web App URL (ends in /exec):")||"").trim();
+  if(!c.token) c.token = (prompt("Paste your API token:")||"").trim();
+  if(c.url && c.token) localStorage.setItem("rc2026_cfg", JSON.stringify(c));
+  API_URL = c.url||""; API_TOKEN = c.token||"";
+  return !!(API_URL && API_TOKEN);
+}
+// Escape any value sourced from the Sheet / localStorage before putting it in innerHTML.
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(ch){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]; }); }
 
 /* ---------------- DATA ---------------- */
 var PHASE = {
@@ -465,10 +478,10 @@ function fillBody(body,d){
 
 function runFields(id,l,isRace){
   return '<div class="logrow">'+
-    '<div class="fld"><label>Distance km</label><input type="number" inputmode="decimal" data-f="dist" value="'+(l.dist||"")+'"></div>'+
-    '<div class="fld"><label>Avg pace /km</label><input type="text" inputmode="decimal" data-f="pace" placeholder="5:30" value="'+(l.pace||"")+'"></div>'+
-    '<div class="fld"><label>RPE 1-10</label><input type="number" inputmode="numeric" data-f="rpe" value="'+(l.rpe||"")+'"></div>'+
-    '<div class="fld note"><label>Notes</label><textarea data-f="notes">'+(l.notes||"")+'</textarea></div>'+
+    '<div class="fld"><label>Distance km</label><input type="number" inputmode="decimal" data-f="dist" value="'+esc(l.dist||"")+'"></div>'+
+    '<div class="fld"><label>Avg pace /km</label><input type="text" inputmode="decimal" data-f="pace" placeholder="5:30" value="'+esc(l.pace||"")+'"></div>'+
+    '<div class="fld"><label>RPE 1-10</label><input type="number" inputmode="numeric" data-f="rpe" value="'+esc(l.rpe||"")+'"></div>'+
+    '<div class="fld note"><label>Notes</label><textarea data-f="notes">'+esc(l.notes||"")+'</textarea></div>'+
     '</div>'+
     '<button class="donebtn'+(l.done?" on":"")+'" data-done>'+(l.done?"✓ Logged":"Mark done")+'</button>';
 }
@@ -487,15 +500,15 @@ function liftBlock(s){
     var l=getLog(s.id+"-"+i);
     rows+='<div class="exrow" data-ex="'+i+'">'+
       '<div class="exn">'+e[0]+'<small>'+e[1]+'</small></div>'+
-      '<input type="text" inputmode="decimal" data-f="w" value="'+(l.w||"")+'" placeholder="–">'+
-      '<input type="text" inputmode="text" data-f="r" value="'+(l.r||"")+'" placeholder="–">'+
+      '<input type="text" inputmode="decimal" data-f="w" value="'+esc(l.w||"")+'" placeholder="–">'+
+      '<input type="text" inputmode="text" data-f="r" value="'+esc(l.r||"")+'" placeholder="–">'+
       '<div class="chk'+(l.on?" on":"")+'" data-chk>'+(l.on?"✓":"")+'</div>'+
       '</div>';
   });
   var m=getLog(s.id+"-meta");
   return '<div class="stitle">🏋 '+L.name+'</div>'+
     '<div class="emph">'+EMPH[s.phase]+'</div>'+ rows+
-    '<div class="logrow"><div class="fld note"><label>Session notes</label><textarea data-f="notes">'+(m.notes||"")+'</textarea></div></div>'+
+    '<div class="logrow"><div class="fld note"><label>Session notes</label><textarea data-f="notes">'+esc(m.notes||"")+'</textarea></div></div>'+
     '<button class="donebtn'+(m.done?" on":"")+'" data-liftdone>'+(m.done?"✓ Logged":"Mark session done")+'</button>';
 }
 function attachLift(sec,s){
@@ -551,7 +564,7 @@ function renderProg(){
     '<div class="ttlist">';
   if(tt.length===0) ttHtml+='<div style="color:var(--faint);font-size:13px;padding:8px 0">No times logged yet. Add your first parkrun.</div>';
   tt.forEach(function(x,i){ var isBest=(x.time===best);
-    ttHtml+='<div class="ttitem"><span>'+fmt(pd(x.iso))+'</span><span class="'+(isBest?"best":"")+'">'+x.time+(isBest?'  ★ PB':'')+'</span><button data-del="'+i+'">✕</button></div>'; });
+    ttHtml+='<div class="ttitem"><span>'+fmt(pd(x.iso))+'</span><span class="'+(isBest?"best":"")+'">'+esc(x.time)+(isBest?'  ★ PB':'')+'</span><button data-del="'+i+'">✕</button></div>'; });
   ttHtml+='</div></div>';
 
   // weekly completion
@@ -568,7 +581,9 @@ function renderProg(){
   var syncHtml='<div class="sectit">Garmin sync</div><div class="ptcard">'+
     '<button class="syncbtn" id="syncbtn">⟳ Sync Garmin now</button>'+
     '<div style="color:var(--faint);font-size:11.5px">Pulls your latest runs. Runs also sync automatically each night.</div></div>';
-  host.innerHTML=ttHtml+wkHtml+syncHtml+'<button class="reset" id="resetbtn">↻ Reload from cloud</button>';
+  host.innerHTML=ttHtml+wkHtml+syncHtml+
+    '<button class="reset" id="resetbtn">↻ Reload from cloud</button>'+
+    '<button class="reset" id="cfgbtn" style="margin-top:0">⚙︎ Connection settings</button>';
 
   document.getElementById("ttbtn").addEventListener("click",function(){
     var d=document.getElementById("ttdate").value, tm=document.getElementById("tttime").value.trim();
@@ -585,6 +600,7 @@ function renderProg(){
     });
   });
   document.getElementById("resetbtn").addEventListener("click",function(){ toast("Reloading…"); pullFromServer().then(function(){ if(document.getElementById("view-prog").classList.contains("on")) renderProg(); }); });
+  document.getElementById("cfgbtn").addEventListener("click",function(){ if(ensureConfig(true)){ toast("Saved — reloading…"); pullFromServer().then(function(){ renderWeek(); renderProg(); }); } });
 }
 function toSec(t){var p=(t||"99:99").split(":");return (+p[0])*60+(+(p[1]||0));}
 
@@ -650,8 +666,9 @@ document.getElementById("nextwk").addEventListener("click",function(){if(curIdx<
 /* ---------------- API / SYNC LAYER ---------------- */
 var RUNS={};  // date 'YYYY-MM-DD' -> Garmin run row (from the Sheet 'Runs' tab)
 
-function apiGet(){ return fetch(API_URL,{method:"GET"}).then(function(r){return r.json();}); }
+function apiGet(){ if(!API_URL) return Promise.reject("no config"); return fetch(API_URL,{method:"GET"}).then(function(r){return r.json();}); }
 function apiPost(type,payload){
+  if(!API_URL || !API_TOKEN) return Promise.resolve({ok:false,offline:true});
   // text/plain avoids the CORS preflight Apps Script can't answer; body is still raw JSON.
   return fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
     body:JSON.stringify({token:API_TOKEN,type:type,payload:payload})})
@@ -739,7 +756,7 @@ function rerender(){
 /* ---------------- INIT ---------------- */
 renderCountdown();
 renderWeek();
-pullFromServer();
+if(ensureConfig()) pullFromServer();   // prompts once per device; offline-cache only if skipped
 </script>
 </body>
 </html>
