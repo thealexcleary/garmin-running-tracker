@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alex Cleary — 2026 Race Plan</title>
+<style>
+  :root{
+    --ink:#15171a; --muted:#5b626b; --line:#e2e5ea; --bg:#fbfbfc; --card:#ffffff;
+    --accent:#c4361b; --accent2:#1f6f4f; --blue:#1d4e7a; --gold:#b8860b;
+    --run:#1d4e7a; --lift:#7a2e1d; --rest:#8a8f96; --soft:#f2f4f7;
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;font-size:16px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:32px 22px 80px;}
+  header.hero{border-bottom:3px solid var(--ink);padding-bottom:20px;margin-bottom:8px;}
+  .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--accent);font-weight:700;}
+  h1{font-size:34px;line-height:1.1;margin:6px 0 4px;font-weight:800;letter-spacing:-.02em;}
+  .sub{color:var(--muted);font-size:15px;max-width:760px;}
+  h2{font-size:23px;margin:42px 0 6px;font-weight:800;letter-spacing:-.01em;border-left:5px solid var(--accent);padding-left:12px;}
+  h3{font-size:17px;margin:24px 0 8px;font-weight:700;}
+  p{margin:10px 0;}
+  .lede{color:var(--muted);margin-top:2px;font-size:15px;}
+  .grid{display:grid;gap:14px;}
+  .cards3{grid-template-columns:repeat(3,1fr);}
+  .cards4{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:820px){.cards3,.cards4{grid-template-columns:1fr 1fr;}}
+  @media(max-width:540px){.cards3,.cards4{grid-template-columns:1fr;}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;}
+  .race{border-top:4px solid var(--accent);}
+  .race .when{font-size:13px;color:var(--muted);font-weight:600;}
+  .race .name{font-size:18px;font-weight:800;margin:2px 0;}
+  .race .meta{font-size:13px;color:var(--muted);}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    padding:3px 8px;border-radius:999px;}
+  .tag.a{background:#fbe3dd;color:#9a2a14;}
+  .tag.b{background:#dcebe0;color:#2c5e3f;}
+  .tag.c{background:#dde7f0;color:#1d4e7a;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{background:var(--soft);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+  td.day{font-weight:700;white-space:nowrap;width:120px;}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;margin-right:6px;}
+  .pill.run{background:#e4eef6;color:var(--run);}
+  .pill.lift{background:#f4e3dd;color:var(--lift);}
+  .pill.rest{background:#eef0f2;color:var(--rest);}
+  .callout{background:#fff8f0;border:1px solid #f0dcc0;border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin:16px 0;font-size:14.5px;}
+  .callout.red{background:#fdf2f0;border-color:#f0cabf;border-left-color:var(--accent);}
+  .callout.green{background:#f1f7f3;border-color:#cfe4d6;border-left-color:var(--accent2);}
+  .callout b{color:var(--ink);}
+  .zones td:first-child{font-weight:700;}
+  .zone-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:middle;}
+  ul{margin:8px 0 8px 0;padding-left:20px;}
+  li{margin:5px 0;}
+  .phase-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .phase-head .wks{font-size:13px;color:var(--muted);font-weight:600;}
+  .small{font-size:13px;color:var(--muted);}
+  .timeline{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:14px 0;}
+  .trow{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid var(--line);}
+  .trow:last-child{border-bottom:none;}
+  .trow .tdate{background:var(--soft);padding:12px 14px;font-weight:700;font-size:13.5px;}
+  .trow .tbody{padding:12px 14px;font-size:14px;}
+  .trow .tbody .ph{font-weight:800;}
+  .barline{height:8px;border-radius:4px;background:linear-gradient(90deg,#dbe6f0,#1d4e7a);margin-top:6px;}
+  .legend{font-size:12.5px;color:var(--muted);margin:6px 0 0;}
+  footer{margin-top:60px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:13px;}
+  @media print{body{background:#fff;font-size:12px;}.wrap{padding:0;}h2{page-break-after:avoid;} .card,.callout,table{page-break-inside:avoid;}}
+  .num{font-variant-numeric:tabular-nums;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">Endurance &amp; Strength Programme</div>
+  <h1>Alex Cleary — Rest of 2026 Race Plan</h1>
+  <p class="sub">Built 3 June 2026. Four runs, three lifts a week. From a huge ultra base into speed, then a podium tilt at Macedon, then back to loop-running durability for The Last Legend. Pace zones are starting points — we recalibrate off your first parkrun.</p>
+</header>
+
+<h2>The four targets</h2>
+<div class="grid cards4">
+  <div class="card race">
+    <div class="when">SUN 14 JUNE 2026 · 11 days out</div>
+    <div class="name">WildBoar 50k</div>
+    <div class="meta">Brisbane Ranges NP · Trails Plus</div>
+    <div style="margin-top:8px"><span class="tag a">Race it hard</span></div>
+    <p class="small" style="margin-top:8px">Tune-up off your base. Prime the legs, send it, accept they'll feel a touch flat early.</p>
+  </div>
+  <div class="card race">
+    <div class="when">SUN 4 OCT 2026 · A-RACE</div>
+    <div class="name">Mt Macedon 50k</div>
+    <div class="meta">Mountain Trail Series R2 · Trails Plus</div>
+    <div style="margin-top:8px"><span class="tag a">Podium / win AG</span></div>
+    <p class="small" style="margin-top:8px">The one that matters. 16 weeks out. Full speed block + specific build aimed at placing.</p>
+  </div>
+  <div class="card race">
+    <div class="when">SUN 13 DEC 2026</div>
+    <div class="name">The Last Legend</div>
+    <div class="meta">Greenvale · Trails Plus</div>
+    <div style="margin-top:8px"><span class="tag b">Loop / last-standing</span></div>
+    <p class="small" style="margin-top:8px">Backyard-style 2.5km loops, not a fixed 50k. Trains differently — durability and discipline, your wheelhouse.</p>
+  </div>
+  <div class="card race">
+    <div class="when">SATURDAYS · ongoing</div>
+    <div class="name">parkrun 5k TTs</div>
+    <div class="meta">Speed testers, Wild Boar → Macedon</div>
+    <div style="margin-top:8px"><span class="tag c">Free benchmark</span></div>
+    <p class="small" style="margin-top:8px">Your moving speed gauge. Every 2-3 weeks. First one resets all the pace zones below.</p>
+  </div>
+</div>
+
+<h2>The shape of the year</h2>
+<p class="lede">Every phase has peaks and troughs built in — roughly 3 weeks of build, 1 week down, repeat. You don't gain fitness in the hard weeks, you gain it absorbing them.</p>
+<div class="timeline">
+  <div class="trow"><div class="tdate">Jun 3 – Jun 14<br><span class="small">~1.5 wks</span></div>
+    <div class="tbody"><span class="ph">Phase 0 — Wild Boar Prime.</span> Wake the legs up off 3-4 weeks down, mini-taper, race hard Sun 14th. No fitness to build here, just open the engine. <div class="barline" style="background:linear-gradient(90deg,#f0d8d0,#c4361b);width:20%"></div></div></div>
+  <div class="trow"><div class="tdate">Jun 15 – Aug 2<br><span class="small">7 wks</span></div>
+    <div class="tbody"><span class="ph">Phase 1 — Recover + Speed Block.</span> Week 1 easy recovery, then sharpen 5k speed: VO2 intervals, threshold tempos, strides. parkrun TTs every 2-3 wks. This protects the top-end you lose dropping from 6 runs to 4. <div class="barline" style="width:55%"></div></div></div>
+  <div class="trow"><div class="tdate">Aug 3 – Sep 20<br><span class="small">7 wks</span></div>
+    <div class="tbody"><span class="ph">Phase 2 — Macedon Build.</span> Convert speed to mountain-50k fitness: hill reps, long climbs at threshold, downhill quad loading, long runs out to 3-3.5h. Peak long run ~3 wks before race. <div class="barline" style="width:85%"></div></div></div>
+  <div class="trow"><div class="tdate">Sep 21 – Oct 4<br><span class="small">2 wks</span></div>
+    <div class="tbody"><span class="ph">Phase 3 — Macedon Taper + Race.</span> Cut volume, keep sharpness. Race Sun 4 Oct. <div class="barline" style="background:linear-gradient(90deg,#dbe6f0,#c4361b);width:35%"></div></div></div>
+  <div class="trow"><div class="tdate">Oct 5 – Nov 1<br><span class="small">4 wks</span></div>
+    <div class="tbody"><span class="ph">Phase 4 — Recover + Bridge.</span> Genuine downtime, easy rebuild. <b>KOTH is Sat 31 Oct</b> — that week stays deliberately light, you'll be flat-out producing the event. <div class="barline" style="background:linear-gradient(90deg,#e6ece2,#1f6f4f);width:30%"></div></div></div>
+  <div class="trow"><div class="tdate">Nov 2 – Dec 13<br><span class="small">6 wks</span></div>
+    <div class="tbody"><span class="ph">Phase 5 — Last Legend Prep.</span> Switch off speed, switch on durability: repeatable loop pacing, time on feet, back-to-backs, fuel + sleep discipline. Taper into Sun 13 Dec. <div class="barline" style="background:linear-gradient(90deg,#e6ece2,#1f6f4f);width:65%"></div></div></div>
+</div>
+
+<h2>Pace zones <span class="small" style="font-weight:400">(starting estimates off a ~20:00 5k — recalibrate after parkrun #1)</span></h2>
+<table class="zones">
+  <thead><tr><th>Zone</th><th>Pace /km</th><th>Feel</th><th>Where it shows up</th></tr></thead>
+  <tbody>
+    <tr><td><span class="zone-dot" style="background:#8a8f96"></span>Recovery</td><td class="num">5:50 – 6:30</td><td>Conversational, almost too slow</td><td>Day-after-hard, shakeouts</td></tr>
+    <tr><td><span class="zone-dot" style="background:#1f6f4f"></span>Easy / aerobic</td><td class="num">5:25 – 5:55</td><td>Full sentences, nose-breathing</td><td>Friday easy, long-run base</td></tr>
+    <tr><td><span class="zone-dot" style="background:#3f7e9c"></span>Steady</td><td class="num">4:50 – 5:10</td><td>Comfortably working</td><td>Long-run finishes, build volume</td></tr>
+    <tr><td><span class="zone-dot" style="background:#1d4e7a"></span>Threshold / tempo</td><td class="num">4:25 – 4:40</td><td>Comfortably hard, ~1hr race effort</td><td>Monday tempo</td></tr>
+    <tr><td><span class="zone-dot" style="background:#b8860b"></span>10k / CV</td><td class="num">4:10 – 4:20</td><td>Hard, controlled</td><td>Longer interval reps</td></tr>
+    <tr><td><span class="zone-dot" style="background:#c4361b"></span>VO2 / 5k</td><td class="num">3:55 – 4:08</td><td>Hard, 3-5 min you can just hold</td><td>Wednesday intervals</td></tr>
+    <tr><td><span class="zone-dot" style="background:#7a2e1d"></span>Reps / strides</td><td class="num">3:35 – 3:55</td><td>Fast but smooth, never straining</td><td>Strides, short speed, finishing kick</td></tr>
+  </tbody>
+</table>
+<p class="small">Trail and vert pacing on Macedon climbs is effort-based, not pace-based — when the gradient kicks up, hold the <b>effort</b> (threshold/CV breathing), ignore the watch pace.</p>
+
+<h2>The training week (default template)</h2>
+<table>
+  <thead><tr><th>Day</th><th>Run</th><th>Lift</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Monday</td><td><span class="pill run">RUN</span>Tempo</td><td><span class="pill lift">LIFT</span>Upper / chest</td><td>Tempo legs + upper body don't fight each other. Good pairing.</td></tr>
+    <tr><td class="day">Tuesday</td><td><span class="pill rest">—</span></td><td><span class="pill lift">LIFT</span>Lower / durability</td><td>Box squats, calf iso holds. Explosive off the box, <b>don't grind to failure</b> (intervals tomorrow).</td></tr>
+    <tr><td class="day">Wednesday</td><td><span class="pill run">RUN</span>Intervals</td><td><span class="pill lift">LIFT</span>Plyo + chest + abs</td><td>Plyo first as a primer (low volume, fresh), then intervals. Or split AM/PM.</td></tr>
+    <tr><td class="day">Thursday</td><td><span class="pill rest">REST</span></td><td><span class="pill rest">REST</span></td><td>Full recovery. Mobility / walk only.</td></tr>
+    <tr><td class="day">Friday</td><td><span class="pill run">RUN</span>Easy</td><td><span class="pill rest">—</span></td><td>Pure aerobic. Add 4-6 strides in build phases.</td></tr>
+    <tr><td class="day">Saturday</td><td><span class="pill run">RUN</span>Long</td><td><span class="pill rest">—</span></td><td>The big one. Grows through Macedon build, becomes the priority for Last Legend.</td></tr>
+    <tr><td class="day">Sunday</td><td><span class="pill rest">REST</span></td><td><span class="pill rest">REST</span></td><td>Off, or easy walk. Protect it.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout red">
+  <b>The one friction point in your layout:</b> heavy legs Tuesday → intervals Wednesday. Your legs won't be 100% fresh for the reps. That's an acceptable trade most of the year, but three rules keep it from costing you:
+  <ul style="margin-bottom:0">
+    <li><b>Tuesday box squats stay explosive and sub-maximal</b> — power off the box, leave 1-2 reps in the tank. The goal is stiffness and pop, not a quad-trashing.</li>
+    <li><b>Run quality in the AM, lift in the PM</b> where your schedule allows (6+ hrs apart) so neither session eats the other.</li>
+    <li><b>During the Speed Block only</b>, dial Tuesday lower back ~10-15% so Wednesday's VO2 reps stay genuinely fast — speed is the whole point of that phase.</li>
+  </ul>
+</div>
+
+<h2>Phase 0 — WildBoar Prime <span class="small" style="font-weight:400">· Jun 3 → Jun 14</span></h2>
+<p class="lede">You haven't run in 3-4 weeks. 11 days can't build fitness — the base from your Front Yard Ultra block is still in there. This window just reminds the legs how to run and tapers you fresh. Race-specific sharpness and downhill control will be the rusty bits; the engine won't be.</p>
+<table>
+  <thead><tr><th>Date</th><th>Session</th><th>Strength</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Wed Jun 3</td><td>Easy 35-40 min + 4× 20s strides — open the legs</td><td>—</td></tr>
+    <tr><td class="day">Thu Jun 4</td><td>Rest or 25 min easy + mobility</td><td>—</td></tr>
+    <tr><td class="day">Fri Jun 5</td><td>Easy 45 min relaxed</td><td>—</td></tr>
+    <tr><td class="day">Sat Jun 6</td><td>Longest pre-race: 80-90 min easy, last 15 min steady. Time on feet, nothing heroic.</td><td>—</td></tr>
+    <tr><td class="day">Sun Jun 7</td><td>Rest / easy walk</td><td>—</td></tr>
+    <tr><td class="day">Mon Jun 8</td><td>Easy 40 min + 4 strides</td><td>Upper / chest — moderate, leave it feeling good</td></tr>
+    <tr><td class="day">Tue Jun 9</td><td>Short quality touch: 15 min easy + 2× 6 min @ threshold + 10 min easy (last hard effort)</td><td>Lower — light + explosive only. Box squats 3×3 easy, calf holds. Nothing heavy.</td></tr>
+    <tr><td class="day">Wed Jun 10</td><td>Easy 30-35 min + 4× 20s strides</td><td>Plyo — skip or 10 min low-amplitude only</td></tr>
+    <tr><td class="day">Thu Jun 11</td><td>Rest</td><td>—</td></tr>
+    <tr><td class="day">Fri Jun 12</td><td>Shakeout 25 min + 3 strides</td><td>—</td></tr>
+    <tr><td class="day">Sat Jun 13</td><td>Rest or 12-15 min jog + 2 strides. Prep gear &amp; fuel.</td><td>—</td></tr>
+    <tr><td class="day" style="background:#fbe3dd">Sun Jun 14</td><td><b>RACE — WildBoar 50k.</b> Start controlled, the base will carry you. Be patient on descents (rusty legs), push the back half if it's there.</td><td>—</td></tr>
+  </tbody>
+</table>
+<div class="callout">
+  <b>Coach's honesty:</b> racing a 50k hard off zero running for a month carries a little risk. If anything sharp shows up in these 11 days — calf, Achilles, knee — back off immediately, you've got bigger fish in October. Listen to the body over the schedule this week.
+</div>
+
+<h2>Phase 1 — Recover + Speed Block <span class="small" style="font-weight:400">· Jun 15 → Aug 2 · 7 weeks</span></h2>
+<p class="lede">Goal: get genuinely fast over 5k while your aerobic base sits in the bank. Week 1 is recovery from Wild Boar. Then five weeks of speed with one down week, peaking into an all-out parkrun TT.</p>
+<h3>Weekly focus by week</h3>
+<table>
+  <thead><tr><th>Week</th><th>Theme</th><th>Wed intervals</th><th>Mon tempo</th><th>Sat long</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Wk1 · Jun 15</td><td><span class="tag b">Recover</span></td><td>Easy only, 6× 20s strides</td><td>Easy 45 min</td><td>Easy 75-90 min</td></tr>
+    <tr><td class="day">Wk2 · Jun 22</td><td>Speed intro</td><td>10× 400 @ 5k, 90s jog</td><td>3× 6 min @ threshold</td><td>90 min easy</td></tr>
+    <tr><td class="day">Wk3 · Jun 29</td><td>Build · <span class="small">parkrun TT Sat 27/Jun or Jul 4</span></td><td>6× 800 @ 5k, 2 min jog</td><td>20 min continuous tempo</td><td>parkrun 5k TT + 40-60 min easy after</td></tr>
+    <tr><td class="day">Wk4 · Jul 6</td><td>Build</td><td>5× 1000 @ 5k–CV, 2:30 jog</td><td>4× 7 min @ threshold</td><td>100 min easy</td></tr>
+    <tr><td class="day">Wk5 · Jul 13</td><td><span class="tag b">Down week</span></td><td>8× 400 fast, full recovery</td><td>15 min tempo</td><td>75 min easy</td></tr>
+    <tr><td class="day">Wk6 · Jul 20</td><td>Sharpen · <span class="small">parkrun TT</span></td><td>Pyramid 200-400-600-800-600-400-200 @ 5k</td><td>2× 12 min @ threshold</td><td>parkrun 5k TT + easy</td></tr>
+    <tr><td class="day">Wk7 · Jul 27</td><td><span class="tag a">Peak speed</span></td><td>5× 3 min @ VO2, 2 min jog (mid-week)</td><td>Easy + strides</td><td><b>All-out parkrun 5k</b> — the number we build Macedon paces from</td></tr>
+  </tbody>
+</table>
+<p class="small"><b>parkrun logistics:</b> parkrun is Saturday 8am, same slot as your long run. On TT weeks, run the 5k hard <em>as</em> the Saturday session, then add easy volume after — or push the long run to Sunday that week. Keeps you at 4 runs without piling on load.</p>
+
+<h2>Phase 2 — Macedon Build <span class="small" style="font-weight:400">· Aug 3 → Sep 20 · 7 weeks</span></h2>
+<p class="lede">Goal: turn that fresh speed into a mountain-50k weapon. Mt Macedon climbs — so intervals go uphill, tempos go long and undulating, and we deliberately load the quads on descents (this is where your box squats pay off). Long runs grow with vert.</p>
+<table>
+  <thead><tr><th>Week</th><th>Theme</th><th>Wed (strength-endurance)</th><th>Mon tempo</th><th>Sat long</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Wk1 · Aug 3</td><td>Transition</td><td>8× 90s uphill hard, jog down</td><td>3× 8 min threshold on rolling terrain</td><td>2h easy + vert</td></tr>
+    <tr><td class="day">Wk2 · Aug 10</td><td>Build</td><td>10× 90s hill reps</td><td>Sustained 20 min climb @ threshold effort</td><td>2.25h, last 30 min steady</td></tr>
+    <tr><td class="day">Wk3 · Aug 17</td><td>Build · downhill focus</td><td>6× 2 min uphill + controlled fast downhills</td><td>4× 8 min threshold</td><td>2.5h trail, practice descending hard</td></tr>
+    <tr><td class="day">Wk4 · Aug 24</td><td><span class="tag b">Down week</span></td><td>6× 90s hills, easy</td><td>2× 10 min threshold</td><td>1.75h easy</td></tr>
+    <tr><td class="day">Wk5 · Aug 31</td><td>Peak build</td><td>5× 3 min uphill @ CV</td><td>40 min undulating tempo</td><td><b>3h+ on Macedon-like terrain</b>, race fuel practice</td></tr>
+    <tr><td class="day">Wk6 · Sep 7</td><td>Race specificity</td><td>Race-effort climbs + 5k goal-pace finish</td><td>2× 15 min threshold</td><td>3-3.5h, biggest day, dial race kit</td></tr>
+    <tr><td class="day">Wk7 · Sep 14</td><td><span class="tag b">Start taper down</span></td><td>5× 2 min hills, crisp</td><td>20 min tempo</td><td>2h relaxed</td></tr>
+  </tbody>
+</table>
+<div class="callout green">
+  <b>Why the downhill obsession:</b> mountain 50ks aren't won on the climbs, they're lost on the descents when your quads give out. Your partial-depth box squats and the eccentric/heel-drop work in the gym are exactly the durability insurance that lets you hammer down late in the race when the field is hobbling. Run the descents in training so race day isn't the first time.
+</div>
+
+<h2>Phase 3 — Macedon Taper + Race <span class="small" style="font-weight:400">· Sep 21 → Oct 4 · 2 weeks</span></h2>
+<table>
+  <thead><tr><th>Week</th><th>Plan</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Wk1 · Sep 21</td><td>Volume down ~35%. Keep intensity <em>touches</em>: Wed 5× 2 min @ CV, Mon 2× 8 min threshold. Sat long cut to 90 min. Legs start feeling springy.</td></tr>
+    <tr><td class="day">Wk2 · Sep 28</td><td>Volume down ~55%, short and sharp only. <b>Race week:</b> Mon easy + 4 strides, Wed 6× 1 min @ 5k + strides, Thu shakeout, Fri rest/travel, Sat (3 Oct) easy 15 min + strides, Sun race.</td></tr>
+    <tr><td class="day" style="background:#fbe3dd">Sun Oct 4</td><td><b>RACE — Mt Macedon 50k.</b> Race plan: sit controlled early, eat and drink on schedule from the gun, attack the climbs at threshold not redline, and back yourself on the descents late. This is the one you've built for.</td></tr>
+  </tbody>
+</table>
+<div class="callout">
+  <b>Lifting through taper:</b> last heavy lower session is Tue Sep 22. After that, lower goes light/explosive only and stops entirely the Tuesday of race week. Keep one light upper early race week if you want, nothing that leaves you sore.
+</div>
+
+<h2>Phase 4 — Recover + Bridge <span class="small" style="font-weight:400">· Oct 5 → Nov 1 · 4 weeks</span></h2>
+<p class="lede">You'll have earned a break. Don't rush back — this is where consistency over the back half of the year is protected or blown.</p>
+<table>
+  <thead><tr><th>Week</th><th>Plan</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Wk1 · Oct 5</td><td>Near-total rest. Walk, swim, mobility. Run only if you feel like it, easy. Lifting off or very light.</td></tr>
+    <tr><td class="day">Wk2 · Oct 12</td><td>Easy running returns, 3-4 short easy runs, no quality. Gym back to gentle full-body.</td></tr>
+    <tr><td class="day">Wk3 · Oct 19</td><td>Rebuild easy aerobic volume, reintroduce strides. One light tempo if keen.</td></tr>
+    <tr><td class="day" style="background:#dcebe0">Wk4 · Oct 26 — KOTH week</td><td><b>KOTH Sat 31 Oct.</b> You're producing a 300-competitor, $50k event — running takes a back seat. 2-3 short easy runs max, skip anything hard, lift once if at all. Show up to the event recovered, not wrecked.</td></tr>
+  </tbody>
+</table>
+
+<h2>Phase 5 — Last Legend Prep <span class="small" style="font-weight:400">· Nov 2 → Dec 13 · 6 weeks</span></h2>
+<p class="lede">Different beast. The Last Legend is backyard-style — 2.5km loops, complete-and-repeat until you can't. That's a discipline and durability test, not a speed test, and it's exactly the game you just played at the Front Yard Ultra. Training flips: long, repeatable, controlled. Keep a thread of speed so you don't go flat, but the work is time on feet and loop pacing.</p>
+<table>
+  <thead><tr><th>Week</th><th>Theme</th><th>Wed</th><th>Mon</th><th>Sat (key session)</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Wk1 · Nov 2</td><td>Re-base</td><td>Easy + strides</td><td>Easy 45 min</td><td>2h easy steady</td></tr>
+    <tr><td class="day">Wk2 · Nov 9</td><td>Loop discipline</td><td>Short tempo 15 min (keep turnover)</td><td>Easy + strides</td><td><b>Loop sim:</b> 2.5km loop every 22-25 min for 4-5 reps, controlled</td></tr>
+    <tr><td class="day">Wk3 · Nov 16</td><td>Back-to-back</td><td>Easy + 6 strides</td><td>Easy 50 min</td><td>Sat 2.5h + Sun 90 min on tired legs</td></tr>
+    <tr><td class="day">Wk4 · Nov 23</td><td>Peak durability</td><td>Short tempo 2× 10 min</td><td>Easy</td><td><b>Yard sim:</b> fixed loop on a set time cadence for 4-5h, full fuel/kit rehearsal</td></tr>
+    <tr><td class="day">Wk5 · Nov 30</td><td><span class="tag b">Down</span></td><td>Easy + strides</td><td>Easy</td><td>2h easy</td></tr>
+    <tr><td class="day">Wk6 · Dec 7</td><td><span class="tag a">Taper</span></td><td>Short easy + strides</td><td>Easy 30 min</td><td>Sat easy 60 min, then rest into race</td></tr>
+    <tr><td class="day" style="background:#dcebe0">Sun Dec 13</td><td colspan="3"><b>RACE — The Last Legend.</b> Settle into a loop rhythm you could hold all day, eat every loop, manage feet and warmth, and let the field unravel around you. This is a head game you're built for.</td></tr>
+  </tbody>
+</table>
+<div class="callout">
+  <b>Backyard specifics to rehearse:</b> fuelling every single loop (solid + liquid), changing socks/shoes before you need to, layering for cold and dark, and the mental reset of starting fresh each loop. Practice the boring stuff in the Wk2 and Wk4 sims so it's automatic on the day.
+</div>
+
+<h2>Strength — the three sessions</h2>
+<p class="lede">Built off the Liam Henderson structure that had you bulletproof: one upper (chest-led), one lower (durability + heavy partial squats + calf isos), one plyo (power + chest + core). Same template all year, intensity periodised to match the running phase. Chest gets volume every session because — your words — you're not training to be scrawny.</p>
+
+<h3><span class="pill lift">MON</span>Session A — Upper (chest priority)</h3>
+<table>
+  <thead><tr><th>Exercise</th><th>Sets × reps</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>Barbell bench or incline DB press</td><td>4 × 5-8</td><td>Primary chest strength</td></tr>
+    <tr><td>Weighted dips or incline DB press</td><td>3 × 8-10</td><td>Chest volume, upper/lower split</td></tr>
+    <tr><td>Pull-up / chin-up (weighted as able)</td><td>3 × 6-10</td><td>Posture &amp; shoulder balance — non-negotiable for a runner</td></tr>
+    <tr><td>Cable or DB chest fly</td><td>3 × 12-15</td><td>More chest, joint-friendly</td></tr>
+    <tr><td>Single-arm DB row</td><td>3 × 10 / side</td><td>Back, anti-rotation</td></tr>
+    <tr><td>Overhead press</td><td>3 × 8</td><td>Shoulder integrity</td></tr>
+    <tr><td>Arms / rear delt superset</td><td>2-3 × 12-15</td><td>Finisher, balance the pressing</td></tr>
+  </tbody>
+</table>
+
+<h3><span class="pill lift">TUE</span>Session B — Lower (durability)</h3>
+<table>
+  <thead><tr><th>Exercise</th><th>Sets × reps</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td><b>Box squat</b> (parallel/partial, not full depth)</td><td>4-5 × 3-5</td><td>Heavy but <b>explosive off the box, sub-maximal</b> — strength without trashing legs for Wed</td></tr>
+    <tr><td><b>Calf iso holds</b> — standing (gastroc)</td><td>3-4 × 30-45s</td><td>The Liam staple. Tendon stiffness = free running economy</td></tr>
+    <tr><td><b>Calf iso holds</b> — seated/bent-knee (soleus)</td><td>3-4 × 30-45s</td><td>Soleus is the big ultra-running calf engine</td></tr>
+    <tr><td>Bulgarian split squat or step-up</td><td>3 × 8 / leg</td><td>Single-leg, running-specific strength &amp; stability</td></tr>
+    <tr><td>RDL or hip thrust</td><td>3 × 6-8</td><td>Posterior chain, hamstring durability</td></tr>
+    <tr><td>Eccentric heel drops + tibialis raises</td><td>3 × 12-15</td><td>Achilles &amp; shin armour — keeps the lower leg injury-free</td></tr>
+  </tbody>
+</table>
+<p class="small"><b>Build-phase add:</b> in the Macedon block, add slow eccentric step-downs / decline split squats for downhill quad durability.</p>
+
+<h3><span class="pill lift">WED</span>Session C — Plyometrics + chest + core</h3>
+<table>
+  <thead><tr><th>Block</th><th>Work</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>Prime</td><td>Ankle pogos 3 × 20, A-skips 3 × 20m</td><td>Low amplitude, stiff ankles</td></tr>
+    <tr><td>Plyo (periodised)</td><td>Toe taps 3 × 30s · lateral hops / skater bounds 3 × 20 · pogos 3 × 20 · bounding 3 × 20m · depth jumps 3 × 5 <span class="small">(only when fresh)</span></td><td>Quality over quantity. <b>Never to fatigue</b> — it primes the intervals, doesn't replace them</td></tr>
+    <tr><td>Chest</td><td>DB press or fly 3 × 10-12</td><td>The "couple of chest sets" you always add here</td></tr>
+    <tr><td>Core</td><td>Hanging leg raise · plank variations · Pallof press · dead bug — 3 rounds</td><td>Trunk stiffness = it holds form deep into an ultra</td></tr>
+  </tbody>
+</table>
+
+<h3>How strength shifts by phase</h3>
+<table>
+  <thead><tr><th>Phase</th><th>Lower &amp; plyo emphasis</th><th>Upper / chest</th></tr></thead>
+  <tbody>
+    <tr><td><b>Speed Block</b></td><td>Power: heavier/lower-rep box squats, plyo ramps up (add depth jumps, bounds). Supports 5k pop. Tue dialled back ~10-15%.</td><td>Maintain volume, build strength</td></tr>
+    <tr><td><b>Macedon Build</b></td><td>Strength-endurance &amp; durability: eccentric/downhill work, calf isos heavy, plyo maintenance only</td><td>Maintain — don't chase PBs, protect running</td></tr>
+    <tr><td><b>Taper weeks</b></td><td>Light &amp; explosive, then stop ~5 days out from a race</td><td>One light session early race week, optional</td></tr>
+    <tr><td><b>Last Legend prep</b></td><td>Durability maintenance, <b>cut plyo volume</b> (loop impact is already high), keep calves &amp; posterior chain robust</td><td>Maintain — keep the chest, you've earned it</td></tr>
+  </tbody>
+</table>
+
+<h2>Fuelling &amp; recovery — the non-negotiables</h2>
+<ul>
+  <li><b>Carbs around quality.</b> Eat properly before Mon tempo, Wed intervals and Sat long. You can't run fast or far underfuelled, and you can't grow a chest in a deficit either.</li>
+  <li><b>Protein for the chest goal.</b> Aim ~1.6-2.0 g/kg bodyweight daily. Without it the lifting is wasted and you'll lean out, not fill out.</li>
+  <li><b>Sleep is the cheat code.</b> 7-9 hrs. It's where the speed block and the strength actually land. KOTH and event weeks wreck this — plan running light around them.</li>
+  <li><b>In-race fuel, rehearsed.</b> 60-90 g carbs/hr for the 50ks, dialled in training not on race day. The Last Legend means eating every loop — practice it.</li>
+  <li><b>Listen over the schedule.</b> A niggle caught early costs a session; ignored it costs a race. Especially the next 11 days off a layoff.</li>
+</ul>
+
+<h2>Key dates at a glance</h2>
+<table>
+  <thead><tr><th>Date</th><th>What</th></tr></thead>
+  <tbody>
+    <tr><td class="day">Sun 14 Jun</td><td>WildBoar 50k — race hard</td></tr>
+    <tr><td class="day">late Jun → Jul</td><td>parkrun 5k TTs (~every 2-3 wks)</td></tr>
+    <tr><td class="day">~Sat 1 Aug</td><td>Peak all-out parkrun 5k — resets Macedon paces</td></tr>
+    <tr><td class="day">wk of Sep 7</td><td>Biggest Macedon long run (3-3.5h)</td></tr>
+    <tr><td class="day">Sun 4 Oct</td><td>Mt Macedon 50k — A-RACE, podium tilt</td></tr>
+    <tr><td class="day">Sat 31 Oct</td><td>KOTH — running stays light this week</td></tr>
+    <tr><td class="day">wk of Nov 23</td><td>Yard simulation long session (4-5h)</td></tr>
+    <tr><td class="day">Sun 13 Dec</td><td>The Last Legend — close out the year</td></tr>
+  </tbody>
+</table>
+
+<footer>
+  Starting framework, not gospel. Paces recalibrate off your first parkrun, and we adjust volume/intensity to how you're actually pulling up week to week. Built for Alex Cleary, 3 June 2026.
+</footer>
+
+</div>
+</body>
+</html>

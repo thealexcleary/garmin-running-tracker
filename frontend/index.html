@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f1115">
+<title>RACE 2026 — Alex</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a20; --panel2:#1f242c; --line:#2a313b;
+    --ink:#f2f4f7; --muted:#9aa3ae; --faint:#6b7480;
+    --prime:#e0533a; --speed:#3d8bd4; --build:#d6a32e; --taper:#9b7ade; --recover:#3fae73; --legend:#2bb3a6;
+    --run:#3d8bd4; --lift:#e07a4a; --rest:#6b7480; --race:#e0533a;
+    --good:#3fae73;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.45;}
+  .app{max-width:560px;margin:0 auto;min-height:100vh;padding-bottom:78px;}
+  /* top */
+  .top{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0f1115,rgba(15,17,21,.96));
+    border-bottom:1px solid var(--line);padding:14px 16px 12px;}
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .brand h1{font-size:18px;font-weight:800;letter-spacing:.02em;margin:0;}
+  .brand .count{font-size:12px;color:var(--muted);text-align:right;line-height:1.25;}
+  .brand .count b{color:var(--ink);font-size:15px;}
+  .phasechip{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:12.5px;
+    font-weight:700;color:var(--ink);background:var(--panel2);border:1px solid var(--line);
+    padding:6px 11px;border-radius:999px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  /* week nav */
+  .wknav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px;}
+  .wknav button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    width:40px;height:36px;border-radius:9px;font-size:18px;font-weight:700;}
+  .wknav .wkmid{flex:1;text-align:center;}
+  .wknav .wkmid .wl{font-size:14px;font-weight:800;}
+  .wknav .wkmid .ws{font-size:11.5px;color:var(--muted);}
+  .kmbar{margin-top:9px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);}
+  .kmtrack{flex:1;height:7px;background:var(--panel2);border-radius:6px;overflow:hidden;}
+  .kmfill{height:100%;background:var(--run);width:0%;transition:width .3s;}
+  /* days */
+  .days{padding:12px 12px 0;}
+  .day{background:var(--panel);border:1px solid var(--line);border-radius:13px;margin-bottom:11px;overflow:hidden;}
+  .day.today{border-color:var(--speed);box-shadow:0 0 0 1px var(--speed) inset;}
+  .day.race{border-color:var(--race);box-shadow:0 0 0 1px var(--race) inset;}
+  .dhead{display:flex;align-items:center;gap:11px;padding:12px 13px;}
+  .dname{display:flex;flex-direction:column;min-width:46px;}
+  .dname .dn{font-size:13px;font-weight:800;letter-spacing:.03em;}
+  .dname .dd{font-size:11px;color:var(--muted);}
+  .dsess{flex:1;display:flex;flex-wrap:wrap;gap:6px;}
+  .schip{font-size:12px;font-weight:700;padding:5px 9px;border-radius:7px;display:inline-flex;align-items:center;gap:6px;}
+  .schip.run{background:rgba(61,139,212,.15);color:#8cc0ee;}
+  .schip.lift{background:rgba(224,122,74,.16);color:#f0ad84;}
+  .schip.rest{background:rgba(107,116,128,.16);color:#aab2bc;}
+  .schip.race{background:rgba(224,83,58,.18);color:#f29684;}
+  .schip .tick{width:14px;height:14px;border-radius:50%;background:var(--good);display:none;align-items:center;justify-content:center;font-size:9px;color:#06210f;font-weight:900;}
+  .schip.done .tick{display:inline-flex;}
+  .todaytag{font-size:10px;font-weight:800;color:#06210f;background:var(--speed);padding:2px 6px;border-radius:5px;}
+  .chev{color:var(--faint);font-size:13px;}
+  .dbody{display:none;border-top:1px solid var(--line);padding:4px 13px 13px;}
+  .day.open .dbody{display:block;}
+  .sess{padding:13px 0;border-bottom:1px dashed var(--line);}
+  .sess:last-child{border-bottom:none;}
+  .sess .stitle{font-size:14px;font-weight:800;display:flex;align-items:center;gap:8px;}
+  .sess .sdet{font-size:13.5px;color:var(--muted);margin:5px 0 2px;}
+  .emph{font-size:12px;color:var(--faint);font-style:italic;margin-top:3px;}
+  /* log forms */
+  .logrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  .fld{flex:1;min-width:84px;}
+  .fld label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);margin-bottom:3px;}
+  .fld input,.fld textarea{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
+    border-radius:8px;padding:9px 10px;font-size:15px;font-family:inherit;}
+  .fld.note{flex-basis:100%;}
+  .fld textarea{resize:vertical;min-height:38px;}
+  .exrow{display:grid;grid-template-columns:1fr 62px 56px 34px;gap:7px;align-items:center;margin-top:8px;}
+  .exrow .exn{font-size:13px;}
+  .exrow .exn small{display:block;color:var(--faint);font-size:11px;}
+  .exrow input{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:7px;padding:8px 6px;font-size:14px;text-align:center;width:100%;}
+  .exrow .chk{width:30px;height:30px;border-radius:7px;border:1px solid var(--line);background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--faint);}
+  .exrow .chk.on{background:var(--good);color:#06210f;border-color:var(--good);font-weight:900;}
+  .exhead{display:grid;grid-template-columns:1fr 62px 56px 34px;gap:7px;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--faint);margin-top:6px;}
+  .donebtn{margin-top:12px;width:100%;padding:12px;border-radius:10px;border:1px solid var(--good);
+    background:transparent;color:var(--good);font-size:14px;font-weight:800;letter-spacing:.03em;}
+  .donebtn.on{background:var(--good);color:#06210f;}
+  /* tabs */
+  .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:30;background:rgba(20,23,28,.97);
+    border-top:1px solid var(--line);display:flex;max-width:560px;margin:0 auto;backdrop-filter:blur(8px);}
+  .tabbar button{flex:1;background:none;border:none;color:var(--faint);padding:9px 0 11px;font-size:10.5px;font-weight:700;letter-spacing:.03em;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  .tabbar button .ic{font-size:18px;line-height:1;}
+  .tabbar button.on{color:var(--ink);}
+  /* views */
+  .view{display:none;}
+  .view.on{display:block;}
+  /* plan list */
+  .pl{padding:12px;}
+  .plw{background:var(--panel);border:1px solid var(--line);border-left-width:4px;border-radius:11px;padding:12px 13px;margin-bottom:9px;}
+  .plw .pt{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .plw .pn{font-size:14px;font-weight:800;}
+  .plw .pk{font-size:12px;color:var(--muted);white-space:nowrap;}
+  .plw .pth{font-size:12.5px;color:var(--muted);margin-top:3px;}
+  .plw .pdates{font-size:11px;color:var(--faint);margin-top:2px;}
+  .plw.cur{box-shadow:0 0 0 1px var(--speed) inset;}
+  /* progress */
+  .pg{padding:14px;}
+  .sectit{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:18px 0 9px;}
+  .ptcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;}
+  .ttadd{display:flex;gap:8px;margin-top:10px;}
+  .ttadd input{flex:1;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px;font-size:15px;}
+  .ttadd button{background:var(--speed);border:none;color:#06210f;font-weight:800;border-radius:8px;padding:0 16px;font-size:14px;}
+  .ttlist{margin-top:10px;}
+  .ttitem{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px dashed var(--line);}
+  .ttitem .best{color:var(--good);font-weight:800;}
+  .ttitem button{background:none;border:none;color:var(--faint);font-size:16px;}
+  .wkdone{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:9px 0;border-bottom:1px dashed var(--line);}
+  .wkdone .mini{flex:1;margin:0 11px;height:6px;background:var(--panel2);border-radius:5px;overflow:hidden;}
+  .wkdone .mini i{display:block;height:100%;background:var(--run);}
+  /* guide */
+  .gd{padding:14px;font-size:14px;}
+  .gd h3{font-size:14px;font-weight:800;margin:20px 0 7px;}
+  .gd table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0;}
+  .gd th,.gd td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .gd th{color:var(--faint);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;}
+  .gd .zd{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px;}
+  .gd .box{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--build);border-radius:9px;padding:12px;margin:12px 0;font-size:13px;color:var(--muted);}
+  .gd .box b{color:var(--ink);}
+  .gd ul{padding-left:18px;margin:7px 0;}
+  .gd li{margin:5px 0;color:var(--muted);}
+  .reset{margin:24px 0 8px;width:100%;background:none;border:1px solid var(--line);color:var(--faint);border-radius:9px;padding:11px;font-size:12px;}
+  .gbadge{font-size:10.5px;font-weight:800;color:#06210f;background:var(--good);padding:2px 7px;border-radius:6px;margin-left:7px;white-space:nowrap;}
+  .syncbtn{margin:2px 0 6px;width:100%;padding:11px;border-radius:10px;border:1px solid var(--speed);background:transparent;color:var(--speed);font-size:13.5px;font-weight:800;}
+  .syncbtn:disabled{opacity:.5;}
+  .toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:999px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="top">
+    <div class="brand">
+      <h1>RACE 2026</h1>
+      <div class="count" id="countdown"></div>
+    </div>
+    <div id="phasechip"></div>
+    <div class="wknav" id="wknav" style="display:none">
+      <button id="prevwk">‹</button>
+      <div class="wkmid"><div class="wl" id="wklabel"></div><div class="ws" id="wksub"></div></div>
+      <button id="nextwk">›</button>
+    </div>
+    <div class="kmbar" id="kmbar" style="display:none">
+      <span id="kmtext"></span>
+      <div class="kmtrack"><div class="kmfill" id="kmfill"></div></div>
+    </div>
+  </div>
+
+  <div class="view on" id="view-week"><div class="days" id="days"></div></div>
+  <div class="view" id="view-plan"><div class="pl" id="planlist"></div></div>
+  <div class="view" id="view-prog"><div class="pg" id="prog"></div></div>
+  <div class="view" id="view-guide"><div class="gd" id="guide"></div></div>
+
+  <div class="tabbar">
+    <button class="on" data-tab="week"><span class="ic">▦</span>Week</button>
+    <button data-tab="plan"><span class="ic">▤</span>Plan</button>
+    <button data-tab="prog"><span class="ic">▲</span>Progress</button>
+    <button data-tab="guide"><span class="ic">≡</span>Guide</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------------- API CONFIG ---------------- */
+var API_URL   = "https://script.google.com/macros/s/AKfycbyPVisAOXN1avfpXaboeAFqQX-aTcQtbNGE1iEgTNjXKo5jKQLjplqJg7VGfSH0iqyzsw/exec";
+var API_TOKEN = "ac89e5fda37dfe931b78b4eb1293e5c7666f89377b09997a";
+
+/* ---------------- DATA ---------------- */
+var PHASE = {
+  prime:{name:"WildBoar Prime", c:"var(--prime)"},
+  speed:{name:"Speed Block", c:"var(--speed)"},
+  build:{name:"Macedon Build", c:"var(--build)"},
+  taper:{name:"Macedon Taper", c:"var(--taper)"},
+  recover:{name:"Recover + Bridge", c:"var(--recover)"},
+  legend:{name:"Last Legend Prep", c:"var(--legend)"}
+};
+
+var LIFTS = {
+  A:{name:"Upper · Chest priority", ex:[
+    ["Barbell bench / incline DB press","4 × 5-8"],
+    ["Weighted dips / incline DB press","3 × 8-10"],
+    ["Pull-up / chin-up (weighted)","3 × 6-10"],
+    ["Cable / DB chest fly","3 × 12-15"],
+    ["Single-arm DB row","3 × 10/side"],
+    ["Overhead press","3 × 8"],
+    ["Barbell / DB bicep curl","3 × 8-12"],
+    ["Hammer curl + rope pushdown SS","2 × 12"]
+  ]},
+  B:{name:"Lower · Durability", ex:[
+    ["Box squat — partial, explosive","4-5 × 3-5"],
+    ["Standing calf iso hold (gastroc)","3-4 × 30-45s"],
+    ["Seated calf iso hold (soleus)","3-4 × 30-45s"],
+    ["Bulgarian split squat / step-up","3 × 8/leg"],
+    ["RDL / hip thrust","3 × 6-8"],
+    ["Eccentric heel drops + tib raises","3 × 12-15"]
+  ]},
+  C:{name:"Plyo · Chest · Heavy core", ex:[
+    ["Toe taps","3 × 30s"],
+    ["Lateral hops / skater bounds","3 × 20"],
+    ["Bounding","3 × 20m"],
+    ["Depth jumps (when fresh)","3 × 5"],
+    ["DB press / fly — chest","3 × 10-12"],
+    ["Weighted V-ups — heavy","4 × 10"],
+    ["Weighted hanging leg raise","4 × 8-10"],
+    ["Heavy cable crunch / wtd decline sit-up","3 × 10"]
+  ]}
+};
+
+var EMPH = {
+  prime:"Race week: light & explosive only, nothing heavy.",
+  speed:"Power emphasis. Heavier box squats, plyo ramps up. Tue ~10-15% lighter so Wed intervals stay fast.",
+  build:"Strength-endurance & durability. Heavy calf isos, eccentric downhill work, plyo maintenance.",
+  taper:"Light & explosive. Stop heavy lower ~5 days out from race.",
+  recover:"Gentle rebuild. Optional — don't chase loads.",
+  legend:"Durability maintenance. Cut plyo volume (loop impact is high), keep core & calves heavy."
+};
+
+// each week: id, mon (Mon ISO), phase, theme, km, tempo, intervals, friday, long, [raceSun]/[koth]/[custom]
+var WEEKS = [
+ {id:"w00", mon:"2026-06-01", phase:"prime", theme:"Legs waking up — plan starts Wed", km:30,
+   custom:[
+    {dn:"Mon",rest:1,note:"Plan starts Wed"},
+    {dn:"Tue",rest:1,note:"—"},
+    {dn:"Wed",run:["Easy + strides","35-40 min easy + 4 × 20s strides","7"]},
+    {dn:"Thu",rest:1,note:"Rest / 25 min easy + mobility"},
+    {dn:"Fri",run:["Easy","45 min relaxed","9"]},
+    {dn:"Sat",run:["Pre-race long","80-90 min easy, last 15 min steady","16"]},
+    {dn:"Sun",rest:1,note:"Rest / easy walk"}
+  ]},
+ {id:"w01", mon:"2026-06-08", phase:"prime", theme:"Taper & race WildBoar 50k", km:35,
+   custom:[
+    {dn:"Mon",run:["Easy + strides","40 min easy + 4 strides","8"],lift:"A"},
+    {dn:"Tue",run:["Quality touch","15 min easy + 2 × 6 min @ threshold + 10 min easy","9"],lift:"B"},
+    {dn:"Wed",run:["Easy + strides","30-35 min easy + 4 × 20s strides","6"],lift:"C"},
+    {dn:"Thu",rest:1,note:"Rest"},
+    {dn:"Fri",run:["Shakeout","25 min + 3 strides","5"]},
+    {dn:"Sat",rest:1,note:"Rest or 12-15 min jog + 2 strides. Prep kit & fuel."},
+    {dn:"Sun",race:"WildBoar 50k — Brisbane Ranges. Start controlled, base carries you, patient on descents."}
+  ]},
+
+ {id:"w02", mon:"2026-06-15", phase:"speed", theme:"Recover from WildBoar", km:40,
+   tempo:"Easy 45 min — no quality this week", intervals:"Easy 40 min + 6 × 20s strides", friday:"8 km easy", long:"75-90 min easy"},
+ {id:"w03", mon:"2026-06-22", phase:"speed", theme:"Speed intro", km:52,
+   tempo:"3 × 6 min @ threshold (4:25-4:40), 2 min jog", intervals:"10 × 400m @ 5k (3:55-4:08), 90s jog", friday:"9 km easy", long:"90 min easy"},
+ {id:"w04", mon:"2026-06-29", phase:"speed", theme:"Build · parkrun TT", km:55,
+   tempo:"20 min continuous tempo @ threshold", intervals:"6 × 800m @ 5k, 2 min jog", friday:"9 km easy + 4 strides", long:"parkrun 5k TT + 8-10 km easy after"},
+ {id:"w05", mon:"2026-07-06", phase:"speed", theme:"Build", km:60,
+   tempo:"4 × 7 min @ threshold, 90s float", intervals:"5 × 1000m @ 5k-CV, 2:30 jog", friday:"10 km easy", long:"100 min easy"},
+ {id:"w06", mon:"2026-07-13", phase:"speed", theme:"Down week", km:45,
+   tempo:"15 min tempo", intervals:"8 × 400m fast, full recovery", friday:"8 km easy", long:"75 min easy"},
+ {id:"w07", mon:"2026-07-20", phase:"speed", theme:"Sharpen · parkrun TT", km:55,
+   tempo:"2 × 12 min @ threshold", intervals:"Pyramid 200-400-600-800-600-400-200 @ 5k", friday:"9 km easy + 4 strides", long:"parkrun 5k TT + 8-10 km easy"},
+ {id:"w08", mon:"2026-07-27", phase:"speed", theme:"Peak speed — all-out TT", km:48,
+   tempo:"Easy 40 min + 6 strides", intervals:"5 × 3 min @ VO2, 2 min jog", friday:"6 km easy + strides (pre-TT)", long:"ALL-OUT parkrun 5k (Sat 1 Aug) — resets your paces"},
+
+ {id:"w09", mon:"2026-08-03", phase:"build", theme:"Transition to hills", km:58,
+   tempo:"3 × 8 min threshold on rolling terrain", intervals:"8 × 90s uphill hard, jog down", friday:"10 km easy", long:"2h easy + vert"},
+ {id:"w10", mon:"2026-08-10", phase:"build", theme:"Build", km:64,
+   tempo:"20 min sustained climb @ threshold effort", intervals:"10 × 90s hill reps", friday:"11 km easy", long:"2h15 easy, last 30 min steady"},
+ {id:"w11", mon:"2026-08-17", phase:"build", theme:"Build · downhill focus", km:68,
+   tempo:"4 × 8 min threshold", intervals:"6 × 2 min uphill + controlled fast downhills", friday:"11 km easy", long:"2h30 trail, practice descending hard"},
+ {id:"w12", mon:"2026-08-24", phase:"build", theme:"Down week", km:52,
+   tempo:"2 × 10 min threshold", intervals:"6 × 90s hills, relaxed", friday:"9 km easy", long:"1h45 easy"},
+ {id:"w13", mon:"2026-08-31", phase:"build", theme:"Peak build", km:75,
+   tempo:"40 min undulating tempo", intervals:"5 × 3 min uphill @ CV", friday:"12 km easy", long:"3h+ on Macedon-like terrain, race fuel"},
+ {id:"w14", mon:"2026-09-07", phase:"build", theme:"Biggest week · race specificity", km:78,
+   tempo:"2 × 15 min threshold", intervals:"Race-effort climbs + 5k goal-pace finish", friday:"12 km easy (or split for B2B)", long:"3-3h30, biggest day, full race kit"},
+ {id:"w15", mon:"2026-09-14", phase:"build", theme:"Start coming down", km:60,
+   tempo:"20 min tempo", intervals:"5 × 2 min hills, crisp", friday:"10 km easy", long:"2h relaxed"},
+
+ {id:"w16", mon:"2026-09-21", phase:"taper", theme:"Taper week 1", km:45,
+   tempo:"2 × 8 min threshold", intervals:"5 × 2 min @ CV", friday:"8 km easy", long:"90 min relaxed"},
+ {id:"w17", mon:"2026-09-28", phase:"taper", theme:"Race week — Mt Macedon", km:30,
+   tempo:"Easy 35 min + 4 strides", intervals:"6 × 1 min @ 5k + strides", friday:"Rest / travel",
+   raceSat:"Sat 3 Oct: easy 15 min + strides (shakeout)", raceSun:"Mt Macedon 50k — A-RACE. Controlled early, fuel from the gun, climbs at threshold, back yourself on the descents."},
+
+ {id:"w18", mon:"2026-10-05", phase:"recover", theme:"Recover from Macedon", km:18,
+   tempo:"Rest / walk / swim", intervals:"Optional easy 30 min", friday:"Rest", long:"Easy 40 min if keen"},
+ {id:"w19", mon:"2026-10-12", phase:"recover", theme:"Easy running returns", km:35,
+   tempo:"Easy 40 min", intervals:"Easy 45 min + strides", friday:"7 km easy", long:"70 min easy"},
+ {id:"w20", mon:"2026-10-19", phase:"recover", theme:"Rebuild aerobic base", km:48,
+   tempo:"15 min light tempo", intervals:"Easy 50 min + 6 strides", friday:"9 km easy", long:"90 min easy"},
+ {id:"w21", mon:"2026-10-26", phase:"recover", theme:"KOTH week — running takes a back seat", km:25,
+   tempo:"Easy 30 min", intervals:"Easy 30 min (skip if event prep)", friday:"Rest — KOTH Sat 31 Oct", long:"Easy 40 min Sun if recovered"},
+
+ {id:"w22", mon:"2026-11-02", phase:"legend", theme:"Re-base for loops", km:50,
+   tempo:"Easy 45 min", intervals:"Easy 50 min + 6 strides", friday:"10 km easy", long:"2h easy steady"},
+ {id:"w23", mon:"2026-11-09", phase:"legend", theme:"Loop discipline", km:58,
+   tempo:"15 min tempo — keep turnover", intervals:"Easy 45 min + strides", friday:"10 km easy", long:"LOOP SIM: 2.5 km every 22-25 min × 4-5, controlled"},
+ {id:"w24", mon:"2026-11-16", phase:"legend", theme:"Back-to-back", km:65,
+   tempo:"Easy + 6 strides", intervals:"Easy 50 min", friday:"12 km easy", long:"B2B: Sat 2h30 + Sun 90 min on tired legs"},
+ {id:"w25", mon:"2026-11-23", phase:"legend", theme:"Yard simulation", km:75,
+   tempo:"2 × 10 min tempo", intervals:"Easy 45 min", friday:"10 km easy", long:"YARD SIM: fixed loop on time cadence 4-5h, full kit & fuel rehearsal"},
+ {id:"w26", mon:"2026-11-30", phase:"legend", theme:"Down week", km:50,
+   tempo:"Easy + strides", intervals:"Easy 45 min", friday:"9 km easy", long:"2h easy"},
+ {id:"w27", mon:"2026-12-07", phase:"legend", theme:"Taper — The Last Legend", km:35,
+   tempo:"Easy 30 min", intervals:"Short easy + strides", friday:"Easy 20 min",
+   raceSat:"Sat 12 Dec: easy 40 min", raceSun:"The Last Legend — settle into a loop rhythm you could hold all day, eat every loop, let the field unravel."}
+];
+
+var RACES = [
+  {name:"WildBoar 50k", iso:"2026-06-14"},
+  {name:"Mt Macedon 50k", iso:"2026-10-04"},
+  {name:"The Last Legend", iso:"2026-12-13"}
+];
+
+/* ---------------- STATE ---------------- */
+var KEY="rc2026_v1";
+function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{logs:{},tt:[]};}catch(e){return {logs:{},tt:[]};} }
+function save(s){ localStorage.setItem(KEY, JSON.stringify(s)); }
+var STATE = load();
+if(!STATE.logs) STATE.logs={}; if(!STATE.tt) STATE.tt=[];
+
+/* ---------------- DATE HELPERS ---------------- */
+function pd(iso){ var p=iso.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+function addDays(d,n){ var x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function iso(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function todayISO(){ return iso(new Date()); }
+var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function fmt(d){ return d.getDate()+" "+MON[d.getMonth()]; }
+var DNAMES=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+/* ---------------- BUILD DAYS ---------------- */
+function buildDays(w){
+  var monday=pd(w.mon), out=[];
+  if(w.custom){
+    w.custom.forEach(function(c,i){
+      var date=addDays(monday,i), sess=[];
+      if(c.run) sess.push({kind:"run",id:w.id+"-"+i+"-run",title:c.run[0],detail:c.run[1],km:c.run[2]});
+      if(c.lift) sess.push({kind:"lift",id:w.id+"-"+i+"-lift",lk:c.lift,phase:w.phase});
+      if(c.race) sess.push({kind:"race",id:w.id+"-"+i+"-race",detail:c.race});
+      if(c.rest) sess.push({kind:"rest",detail:c.note||"Rest"});
+      out.push({dn:DNAMES[i],date:date,sess:sess});
+    });
+    return out;
+  }
+  function run(i,t,det,k){return {kind:"run",id:w.id+"-"+i+"-run",title:t,detail:det,km:k};}
+  function lift(i,k){return {kind:"lift",id:w.id+"-"+i+"-lift",lk:k,phase:w.phase};}
+  out.push({dn:"Mon",date:addDays(monday,0),sess:[run(0,"Tempo",w.tempo,""),lift(0,"A")]});
+  out.push({dn:"Tue",date:addDays(monday,1),sess:[lift(1,"B")]});
+  out.push({dn:"Wed",date:addDays(monday,2),sess:[run(2,"Intervals",w.intervals,""),lift(2,"C")]});
+  out.push({dn:"Thu",date:addDays(monday,3),sess:[{kind:"rest",detail:"Rest — mobility / walk only"}]});
+  out.push({dn:"Fri",date:addDays(monday,4),sess:[run(4,"Easy",w.friday,"")]});
+  // Sat
+  if(w.raceSat && w.raceSun){
+    out.push({dn:"Sat",date:addDays(monday,5),sess:[{kind:"run",id:w.id+"-5-run",title:"Shakeout",detail:w.raceSat,km:""}]});
+  } else {
+    out.push({dn:"Sat",date:addDays(monday,5),sess:[run(5,"Long run",w.long,"")]});
+  }
+  // Sun
+  if(w.raceSun){
+    out.push({dn:"Sun",date:addDays(monday,6),sess:[{kind:"race",id:w.id+"-6-race",detail:w.raceSun}]});
+  } else {
+    out.push({dn:"Sun",date:addDays(monday,6),sess:[{kind:"rest",detail:"Rest — protect it"}]});
+  }
+  return out;
+}
+
+/* ---------------- WEEK INDEX ---------------- */
+function currentWeekIdx(){
+  var t=todayISO();
+  for(var i=0;i<WEEKS.length;i++){
+    var mon=pd(WEEKS[i].mon), sun=addDays(mon,6);
+    if(t>=iso(mon) && t<=iso(sun)) return i;
+  }
+  // before plan -> 0 ; after -> last
+  if(t < WEEKS[0].mon) return 0;
+  return WEEKS.length-1;
+}
+var curIdx=currentWeekIdx();
+
+/* ---------------- RENDER: WEEK ---------------- */
+function logKey(id){return id;}
+function getLog(id){return STATE.logs[id]||{};}
+function setLog(id,obj){STATE.logs[id]=Object.assign(getLog(id),obj);save(STATE);}
+
+function sessDone(s){
+  if(s.kind==="run"||s.kind==="race") return !!getLog(s.id).done;
+  if(s.kind==="lift") return !!getLog(s.id+"-meta").done;
+  return false;
+}
+
+function renderWeek(){
+  var w=WEEKS[curIdx], days=buildDays(w), ph=PHASE[w.phase];
+  document.getElementById("wknav").style.display="flex";
+  document.getElementById("kmbar").style.display="flex";
+  document.getElementById("wklabel").textContent="Week "+(curIdx)+" · "+ph.name;
+  var mon=pd(w.mon), sun=addDays(mon,6);
+  document.getElementById("wksub").textContent=fmt(mon)+" – "+fmt(sun)+"  ·  "+w.theme;
+  // km progress
+  var logged=0; days.forEach(function(d){d.sess.forEach(function(s){if(s.kind==="run"){var l=getLog(s.id);if(l.dist)logged+=parseFloat(l.dist)||0;}});});
+  var pct=w.km?Math.min(100,Math.round(logged/w.km*100)):0;
+  document.getElementById("kmtext").textContent=Math.round(logged)+" / "+w.km+" km"+((w.raceSun||w.raceSat&&w.raceSun)?" + race":"");
+  document.getElementById("kmfill").style.width=pct+"%";
+
+  var host=document.getElementById("days"); host.innerHTML="";
+  var tISO=todayISO();
+  days.forEach(function(d){
+    var dISO=iso(d.date), isToday=(dISO===tISO);
+    var hasRace=d.sess.some(function(s){return s.kind==="race";});
+    var div=document.createElement("div");
+    div.className="day"+(isToday?" today":"")+(hasRace?" race":"");
+    // head
+    var chips=d.sess.map(function(s){
+      var done=sessDone(s);
+      var lbl = s.kind==="run"?(s.title||"Run") : s.kind==="lift"?LIFTS[s.lk].name.split(" · ")[0] : s.kind==="race"?"RACE":"Rest";
+      var cls = s.kind==="race"?"race":s.kind;
+      return '<span class="schip '+cls+(done?" done":"")+'"><span class="tick">✓</span>'+lbl+'</span>';
+    }).join("");
+    div.innerHTML =
+      '<div class="dhead">'+
+        '<div class="dname"><span class="dn">'+d.dn+(isToday?' <span class="todaytag">TODAY</span>':'')+'</span><span class="dd">'+fmt(d.date)+'</span></div>'+
+        '<div class="dsess">'+chips+'</div>'+
+        '<span class="chev">▾</span>'+
+      '</div>'+
+      '<div class="dbody"></div>';
+    var head=div.querySelector(".dhead");
+    head.addEventListener("click",function(){div.classList.toggle("open");if(div.classList.contains("open"))fillBody(div.querySelector(".dbody"),d);});
+    if(isToday){div.classList.add("open");fillBody(div.querySelector(".dbody"),d);}
+    host.appendChild(div);
+  });
+  renderPhaseChip(w);
+}
+
+function renderPhaseChip(w){
+  var ph=PHASE[w.phase];
+  document.getElementById("phasechip").innerHTML='<span class="phasechip"><span class="dot" style="background:'+ph.c+'"></span>'+ph.name+' · '+w.theme+'</span>';
+}
+
+function fillBody(body,d){
+  body.innerHTML="";
+  d.sess.forEach(function(s){
+    var sec=document.createElement("div"); sec.className="sess";
+    if(s.kind==="rest"){
+      sec.innerHTML='<div class="stitle">🛌 Rest</div><div class="sdet">'+s.detail+'</div>';
+    } else if(s.kind==="race"){
+      var l=getLog(s.id);
+      var rbadge=l.garmin?'<span class="gbadge">🟢 from Garmin</span>':'';
+      sec.innerHTML='<div class="stitle">🏁 RACE DAY'+rbadge+'</div><div class="sdet">'+s.detail+'</div>'+
+        runFields(s.id,l,true);
+      attachRun(sec,s.id);
+    } else if(s.kind==="run"){
+      var l2=getLog(s.id);
+      var gbadge=l2.garmin?'<span class="gbadge">🟢 from Garmin</span>':'';
+      sec.innerHTML='<div class="stitle">🏃 '+s.title+(s.km?' <span style="color:var(--faint);font-weight:600;font-size:12px">· target '+s.km+' km</span>':'')+gbadge+'</div>'+
+        '<div class="sdet">'+s.detail+'</div>'+ runFields(s.id,l2,false);
+      attachRun(sec,s.id);
+    } else if(s.kind==="lift"){
+      sec.innerHTML=liftBlock(s);
+      attachLift(sec,s);
+    }
+    body.appendChild(sec);
+  });
+}
+
+function runFields(id,l,isRace){
+  return '<div class="logrow">'+
+    '<div class="fld"><label>Distance km</label><input type="number" inputmode="decimal" data-f="dist" value="'+(l.dist||"")+'"></div>'+
+    '<div class="fld"><label>Avg pace /km</label><input type="text" inputmode="decimal" data-f="pace" placeholder="5:30" value="'+(l.pace||"")+'"></div>'+
+    '<div class="fld"><label>RPE 1-10</label><input type="number" inputmode="numeric" data-f="rpe" value="'+(l.rpe||"")+'"></div>'+
+    '<div class="fld note"><label>Notes</label><textarea data-f="notes">'+(l.notes||"")+'</textarea></div>'+
+    '</div>'+
+    '<button class="donebtn'+(l.done?" on":"")+'" data-done>'+(l.done?"✓ Logged":"Mark done")+'</button>';
+}
+function attachRun(sec,id){
+  sec.querySelectorAll("[data-f]").forEach(function(inp){
+    inp.addEventListener("input",function(){var o={};o[inp.getAttribute("data-f")]=inp.value;setLog(id,o);queue("r:"+id,function(){pushRun(id);});});
+  });
+  var b=sec.querySelector("[data-done]");
+  b.addEventListener("click",function(){var l=getLog(id);setLog(id,{done:!l.done});b.classList.toggle("on");b.textContent=getLog(id).done?"✓ Logged":"Mark done";refreshChips();updateKm();pushRun(id);});
+}
+
+function liftBlock(s){
+  var L=LIFTS[s.lk], rows="";
+  rows+='<div class="exhead"><span>Exercise</span><span>kg</span><span>reps</span><span>✓</span></div>';
+  L.ex.forEach(function(e,i){
+    var l=getLog(s.id+"-"+i);
+    rows+='<div class="exrow" data-ex="'+i+'">'+
+      '<div class="exn">'+e[0]+'<small>'+e[1]+'</small></div>'+
+      '<input type="text" inputmode="decimal" data-f="w" value="'+(l.w||"")+'" placeholder="–">'+
+      '<input type="text" inputmode="text" data-f="r" value="'+(l.r||"")+'" placeholder="–">'+
+      '<div class="chk'+(l.on?" on":"")+'" data-chk>'+(l.on?"✓":"")+'</div>'+
+      '</div>';
+  });
+  var m=getLog(s.id+"-meta");
+  return '<div class="stitle">🏋 '+L.name+'</div>'+
+    '<div class="emph">'+EMPH[s.phase]+'</div>'+ rows+
+    '<div class="logrow"><div class="fld note"><label>Session notes</label><textarea data-f="notes">'+(m.notes||"")+'</textarea></div></div>'+
+    '<button class="donebtn'+(m.done?" on":"")+'" data-liftdone>'+(m.done?"✓ Logged":"Mark session done")+'</button>';
+}
+function attachLift(sec,s){
+  sec.querySelectorAll(".exrow").forEach(function(row){
+    var i=row.getAttribute("data-ex"), id=s.id+"-"+i;
+    row.querySelectorAll("[data-f]").forEach(function(inp){
+      inp.addEventListener("input",function(){var o={};o[inp.getAttribute("data-f")]=inp.value;setLog(id,o);queue("l:"+s.id,function(){pushLift(s);});});
+    });
+    var chk=row.querySelector("[data-chk]");
+    chk.addEventListener("click",function(){var l=getLog(id);setLog(id,{on:!l.on});chk.classList.toggle("on");chk.textContent=getLog(id).on?"✓":"";queue("l:"+s.id,function(){pushLift(s);});});
+  });
+  sec.querySelector("[data-f=notes]").addEventListener("input",function(){setLog(s.id+"-meta",{notes:this.value});queue("l:"+s.id,function(){pushLift(s);});});
+  var b=sec.querySelector("[data-liftdone]");
+  b.addEventListener("click",function(){var m=getLog(s.id+"-meta");setLog(s.id+"-meta",{done:!m.done});b.classList.toggle("on");b.textContent=getLog(s.id+"-meta").done?"✓ Logged":"Mark session done";refreshChips();pushLift(s);});
+}
+
+function refreshChips(){ renderWeek(); }
+function updateKm(){ /* handled in renderWeek */ }
+
+/* ---------------- COUNTDOWN ---------------- */
+function renderCountdown(){
+  var t=new Date(todayISO()), next=null;
+  for(var i=0;i<RACES.length;i++){ if(pd(RACES[i].iso)>=t){next=RACES[i];break;} }
+  var el=document.getElementById("countdown");
+  if(next){ var days=Math.round((pd(next.iso)-t)/86400000);
+    el.innerHTML=next.name+'<br><b>'+days+' days</b>'; }
+  else el.innerHTML="Season done 🎉";
+}
+
+/* ---------------- PLAN LIST ---------------- */
+function renderPlan(){
+  var host=document.getElementById("planlist"); host.innerHTML="";
+  WEEKS.forEach(function(w,idx){
+    var ph=PHASE[w.phase], mon=pd(w.mon), sun=addDays(mon,6);
+    var div=document.createElement("div");
+    div.className="plw"+(idx===curIdx?" cur":""); div.style.borderLeftColor=ph.c;
+    div.innerHTML='<div class="pt"><span class="pn">Wk '+idx+' · '+ph.name+'</span><span class="pk">'+w.km+' km'+(w.raceSun?' + race':'')+'</span></div>'+
+      '<div class="pth">'+w.theme+'</div>'+
+      '<div class="pdates">'+fmt(mon)+' – '+fmt(sun)+'</div>';
+    div.addEventListener("click",function(){curIdx=idx;switchTab("week");renderWeek();window.scrollTo(0,0);});
+    host.appendChild(div);
+  });
+}
+
+/* ---------------- PROGRESS ---------------- */
+function renderProg(){
+  var host=document.getElementById("prog");
+  // parkrun
+  var tt=STATE.tt.slice().sort(function(a,b){return a.iso<b.iso?-1:1;});
+  var best=null; tt.forEach(function(x){ if(best===null||toSec(x.time)<toSec(best))best=x.time; });
+  var ttHtml='<div class="sectit">parkrun 5k TTs</div><div class="ptcard">'+
+    '<div class="ttadd"><input id="ttdate" type="date"><input id="tttime" type="text" placeholder="mm:ss e.g. 19:45"><button id="ttbtn">Add</button></div>'+
+    '<div class="ttlist">';
+  if(tt.length===0) ttHtml+='<div style="color:var(--faint);font-size:13px;padding:8px 0">No times logged yet. Add your first parkrun.</div>';
+  tt.forEach(function(x,i){ var isBest=(x.time===best);
+    ttHtml+='<div class="ttitem"><span>'+fmt(pd(x.iso))+'</span><span class="'+(isBest?"best":"")+'">'+x.time+(isBest?'  ★ PB':'')+'</span><button data-del="'+i+'">✕</button></div>'; });
+  ttHtml+='</div></div>';
+
+  // weekly completion
+  var wkHtml='<div class="sectit">Weekly volume logged</div><div class="ptcard">';
+  WEEKS.forEach(function(w,idx){
+    var days=buildDays(w), logged=0;
+    days.forEach(function(d){d.sess.forEach(function(s){if(s.kind==="run"){var l=getLog(s.id);if(l.dist)logged+=parseFloat(l.dist)||0;}});});
+    if(logged>0){ var pct=w.km?Math.min(100,Math.round(logged/w.km*100)):0;
+      wkHtml+='<div class="wkdone"><span>Wk '+idx+'</span><div class="mini"><i style="width:'+pct+'%"></i></div><span>'+Math.round(logged)+'/'+w.km+'</span></div>'; }
+  });
+  wkHtml+='</div>';
+  if(!/wkdone/.test(wkHtml)) wkHtml='<div class="sectit">Weekly volume logged</div><div class="ptcard"><div style="color:var(--faint);font-size:13px">Log run distances and your weekly totals show here.</div></div>';
+
+  var syncHtml='<div class="sectit">Garmin sync</div><div class="ptcard">'+
+    '<button class="syncbtn" id="syncbtn">⟳ Sync Garmin now</button>'+
+    '<div style="color:var(--faint);font-size:11.5px">Pulls your latest runs. Runs also sync automatically each night.</div></div>';
+  host.innerHTML=ttHtml+wkHtml+syncHtml+'<button class="reset" id="resetbtn">↻ Reload from cloud</button>';
+
+  document.getElementById("ttbtn").addEventListener("click",function(){
+    var d=document.getElementById("ttdate").value, tm=document.getElementById("tttime").value.trim();
+    if(!d||!tm)return; STATE.tt.push({iso:d,time:tm}); save(STATE);
+    apiPost("parkrun",{date:d,time_mmss:tm}).then(function(r){ toast(r&&r.ok!==false?"Parkrun saved ✓":"Saved offline"); });
+    renderProg();
+  });
+  host.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){STATE.tt.splice(+b.getAttribute("data-del"),1);save(STATE);renderProg();});});
+  document.getElementById("syncbtn").addEventListener("click",function(){
+    var sb=this; sb.disabled=true; sb.textContent="Syncing… (~30s)";
+    apiPost("sync",null).then(function(r){
+      toast(r&&r.ok!==false?"Sync triggered":"Sync unavailable");
+      setTimeout(function(){ pullFromServer().then(function(){ if(document.getElementById("view-prog").classList.contains("on")) renderProg(); }); },20000);
+    });
+  });
+  document.getElementById("resetbtn").addEventListener("click",function(){ toast("Reloading…"); pullFromServer().then(function(){ if(document.getElementById("view-prog").classList.contains("on")) renderProg(); }); });
+}
+function toSec(t){var p=(t||"99:99").split(":");return (+p[0])*60+(+(p[1]||0));}
+
+/* ---------------- GUIDE ---------------- */
+function renderGuide(){
+  document.getElementById("guide").innerHTML=
+  '<h3>Pace zones <span style="color:var(--faint);font-weight:500;font-size:11px">(off ~20:00 5k — recalibrate after parkrun #1)</span></h3>'+
+  '<table><tr><th>Zone</th><th>/km</th><th>Where</th></tr>'+
+  zr("#6b7480","Recovery","5:50-6:30","Day-after-hard")+
+  zr("#3fae73","Easy/aerobic","5:25-5:55","Fri easy, long base")+
+  zr("#3f7e9c","Steady","4:50-5:10","Long finishes")+
+  zr("#3d8bd4","Threshold","4:25-4:40","Mon tempo")+
+  zr("#d6a32e","10k / CV","4:10-4:20","Longer reps")+
+  zr("#e0533a","VO2 / 5k","3:55-4:08","Wed intervals")+
+  zr("#e07a4a","Reps / strides","3:35-3:55","Strides, kick")+
+  '</table>'+
+  '<div class="box"><b>Trail/vert:</b> on Macedon climbs hold the <b>effort</b>, not the pace — ignore the watch when it ramps up.</div>'+
+
+  '<h3>The Tue → Wed rule</h3>'+
+  '<div class="box">Heavy legs Tuesday into intervals Wednesday is the one friction point. Three rules:'+
+  '<ul><li>Tuesday box squats stay <b>explosive & sub-maximal</b> — pop off the box, leave 1-2 in the tank.</li>'+
+  '<li>Run quality AM, lift PM where you can (6+ hrs apart).</li>'+
+  '<li>Speed Block only: dial Tuesday lower back ~10-15% so Wed reps stay fast.</li></ul></div>'+
+
+  '<h3>Strength templates</h3>'+
+  liftRef("A")+liftRef("B")+liftRef("C")+
+
+  '<h3>Fuelling &amp; recovery</h3>'+
+  '<ul><li><b>Carbs around quality</b> — Mon tempo, Wed intervals, Sat long. Can\'t run fast or grow a chest underfuelled.</li>'+
+  '<li><b>Protein ~1.6-2.0 g/kg/day</b> for the chest goal.</li>'+
+  '<li><b>Sleep 7-9h</b> — where the speed and strength actually land.</li>'+
+  '<li><b>In-race fuel 60-90 g carbs/hr</b>, rehearsed in training. Last Legend = eat every loop.</li>'+
+  '<li><b>Listen over the schedule.</b> A niggle caught early costs a session, ignored it costs a race.</li></ul>'+
+
+  '<h3>The shape of the year</h3>'+
+  '<ul><li><b>Jun 14</b> — WildBoar 50k (race hard off your base)</li>'+
+  '<li><b>Jun 15 → Aug 2</b> — Speed Block, parkrun TTs, peak 5k</li>'+
+  '<li><b>Aug 3 → Sep 20</b> — Macedon build, hills + downhill durability</li>'+
+  '<li><b>Sep 21 → Oct 4</b> — taper, race Mt Macedon (A-race)</li>'+
+  '<li><b>Oct 5 → Nov 1</b> — recover (KOTH 31 Oct stays light)</li>'+
+  '<li><b>Nov 2 → Dec 13</b> — Last Legend prep, loops & durability</li></ul>';
+}
+function zr(c,n,p,w){return '<tr><td><span class="zd" style="background:'+c+'"></span>'+n+'</td><td>'+p+'</td><td>'+w+'</td></tr>';}
+function liftRef(k){var L=LIFTS[k];var r='<div class="box"><b>'+L.name+'</b><ul>';L.ex.forEach(function(e){r+='<li>'+e[0]+' — '+e[1]+'</li>';});r+='</ul></div>';return r;}
+
+/* ---------------- TABS ---------------- */
+function switchTab(t){
+  ["week","plan","prog","guide"].forEach(function(x){
+    document.getElementById("view-"+x).classList.toggle("on",x===t);
+  });
+  document.querySelectorAll(".tabbar button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-tab")===t);});
+  var showWk=(t==="week");
+  document.getElementById("wknav").style.display=showWk?"flex":"none";
+  document.getElementById("kmbar").style.display=showWk?"flex":"none";
+  if(t==="plan")renderPlan(); if(t==="prog")renderProg(); if(t==="guide")renderGuide();
+}
+document.querySelectorAll(".tabbar button").forEach(function(b){
+  b.addEventListener("click",function(){switchTab(b.getAttribute("data-tab"));window.scrollTo(0,0);});
+});
+document.getElementById("prevwk").addEventListener("click",function(){if(curIdx>0){curIdx--;renderWeek();window.scrollTo(0,0);}});
+document.getElementById("nextwk").addEventListener("click",function(){if(curIdx<WEEKS.length-1){curIdx++;renderWeek();window.scrollTo(0,0);}});
+
+/* ---------------- API / SYNC LAYER ---------------- */
+var RUNS={};  // date 'YYYY-MM-DD' -> Garmin run row (from the Sheet 'Runs' tab)
+
+function apiGet(){ return fetch(API_URL,{method:"GET"}).then(function(r){return r.json();}); }
+function apiPost(type,payload){
+  // text/plain avoids the CORS preflight Apps Script can't answer; body is still raw JSON.
+  return fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify({token:API_TOKEN,type:type,payload:payload})})
+    .then(function(r){return r.text();}).then(function(t){try{return JSON.parse(t);}catch(e){return {ok:true};}})
+    .catch(function(){return {ok:false,offline:true};});
+}
+
+var _toastT;
+function toast(msg){
+  var el=document.getElementById("toast");
+  if(!el){el=document.createElement("div");el.id="toast";el.className="toast";document.body.appendChild(el);}
+  el.textContent=msg; el.classList.add("show");
+  clearTimeout(_toastT); _toastT=setTimeout(function(){el.classList.remove("show");},1400);
+}
+
+function truthy(v){ return v===true||v==="TRUE"||v==="true"||v===1; }
+function sliceDate(v){ return v?String(v).slice(0,10):""; }
+
+// session_id 'w03-2-run' -> that day's ISO date (week id + day index, matching the plan)
+function sessionDate(id){
+  var p=id.split("-"), wk=p[0], dayIdx=+p[1];
+  for(var i=0;i<WEEKS.length;i++){ if(WEEKS[i].id===wk) return iso(addDays(pd(WEEKS[i].mon),dayIdx)); }
+  return "";
+}
+// map every plan run/race day -> its session_id, for matching Garmin runs by date
+function planRunByDate(){
+  var map={};
+  WEEKS.forEach(function(w){ buildDays(w).forEach(function(d){ var dt=iso(d.date);
+    d.sess.forEach(function(s){ if(s.kind==="run"||s.kind==="race") map[dt]=s.id; }); }); });
+  return map;
+}
+
+/* ---- PUSH (write-through, debounced per session) ---- */
+var pushT={};
+function queue(key,fn){ clearTimeout(pushT[key]); pushT[key]=setTimeout(fn,650); }
+function pushRun(id){
+  var l=getLog(id), kind=id.slice(id.lastIndexOf("-")+1);
+  apiPost("log",{session_id:id, date:sessionDate(id), kind:(kind==="race"?"race":"run"),
+    done:l.done?"TRUE":"FALSE", distance_km:(l.dist||""), pace:(l.pace||""), rpe:(l.rpe||""), notes:(l.notes||"")})
+    .then(function(r){ toast(r&&r.ok!==false?"Saved ✓":"Saved offline"); });
+}
+function pushLift(s){
+  var L=LIFTS[s.lk], arr=[];
+  for(var i=0;i<L.ex.length;i++){ var l=getLog(s.id+"-"+i); arr.push({w:(l.w||""),r:(l.r||""),on:l.on?1:0}); }
+  var m=getLog(s.id+"-meta");
+  apiPost("log",{session_id:s.id, date:sessionDate(s.id), kind:"lift",
+    done:m.done?"TRUE":"FALSE", notes:(m.notes||""), exercises_json:JSON.stringify(arr)})
+    .then(function(r){ toast(r&&r.ok!==false?"Saved ✓":"Saved offline"); });
+}
+
+/* ---- PULL (load + merge server state) ---- */
+function pullFromServer(){
+  return apiGet().then(function(d){ if(!d||d.ok===false) return; applyServer(d); rerender(); })
+    .catch(function(){ /* offline: stay on localStorage cache */ });
+}
+function applyServer(d){
+  (d.logs||[]).forEach(function(row){
+    var id=row.session_id; if(!id) return;
+    if(row.kind==="lift"){
+      STATE.logs[id+"-meta"]={done:truthy(row.done), notes:row.notes||""};
+      var arr=[]; try{arr=JSON.parse(row.exercises_json||"[]");}catch(e){}
+      arr.forEach(function(ex,i){ STATE.logs[id+"-"+i]={w:ex.w||"", r:ex.r||"", on:!!ex.on}; });
+    } else {
+      STATE.logs[id]={ dist:(row.distance_km===""||row.distance_km==null)?"":String(row.distance_km),
+        pace:row.pace||"", rpe:(row.rpe===""||row.rpe==null)?"":String(row.rpe),
+        notes:row.notes||"", done:truthy(row.done) };
+    }
+  });
+  STATE.tt=(d.parkrun||[]).map(function(p){return {iso:sliceDate(p.date),time:p.time_mmss};})
+    .filter(function(x){return x.iso&&x.time;});
+  RUNS={}; (d.runs||[]).forEach(function(r){ var dt=sliceDate(r.date); if(dt) RUNS[dt]=r; });
+  // seed Garmin distances into the matching plan run days (counts toward km + shows the badge)
+  var prMap=planRunByDate();
+  Object.keys(RUNS).forEach(function(dt){ var id=prMap[dt]; if(!id) return; var cur=STATE.logs[id]||{};
+    if(cur.dist===undefined||cur.dist==="") cur.dist=String(RUNS[dt].distance_km);
+    if(cur.pace===undefined||cur.pace==="") cur.pace=RUNS[dt].avg_pace;
+    cur.garmin=true; STATE.logs[id]=cur; });
+  save(STATE);
+}
+function rerender(){
+  renderWeek();
+  if(document.getElementById("view-prog").classList.contains("on")) renderProg();
+}
+
+/* ---------------- INIT ---------------- */
+renderCountdown();
+renderWeek();
+pullFromServer();
+</script>
+</body>
+</html>

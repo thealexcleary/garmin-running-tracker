@@ -1,0 +1,29 @@
+name: nightly-sync
+
+# Nightly Garmin pull + manual "Sync now" trigger.
+on:
+  schedule:
+    - cron: "0 19 * * *"   # 19:00 UTC ~= 05:00 AEST. Adjust if needed.
+  workflow_dispatch:        # lets the "Sync now" button (Apps Script) trigger this
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install -r garmin-sync/requirements.txt
+
+      # Auth is a saved DI-OAuth token (GARMIN_TOKENS_B64), generated once locally via
+      # bootstrap_token.py. It auto-refreshes ~1yr, so no password/2FA is needed here.
+      - name: Run sync
+        env:
+          GARMIN_TOKENS_B64: ${{ secrets.GARMIN_TOKENS_B64 }}
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: python garmin-sync/sync.py

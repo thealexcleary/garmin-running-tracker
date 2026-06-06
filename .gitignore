@@ -1,0 +1,15 @@
+# Secrets — never commit
+.env
+garmin-sync/garmin_token_b64.txt
+garmin-sync/garmin_tokens.json
+
+# Python
+garmin-sync/.venv/
+**/__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+
+# Test / tooling artifacts
+.playwright-mcp/
