@@ -88,7 +88,15 @@ def post_run(payload):
     req = urllib.request.Request(APPS_SCRIPT_URL, data=body,
                                  headers={"Content-Type": "text/plain"})
     with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read().decode()
+        text = r.read().decode()
+    try:
+        res = json.loads(text)
+    except ValueError:
+        res = {}
+    # Don't claim success on a rejected write (e.g. bad token) — fail so the Action emails.
+    if res.get("ok") is False:
+        raise RuntimeError(f"API rejected run {payload['activity_id']}: {res.get('error')}")
+    return res
 
 
 def main():
